@@ -3,24 +3,26 @@
 #define INCLUDE_TREE_H_
 
 #include <vector>
-struct Node {
-    char value;
-    std::vector<Node*> children;
-    Node(char v) : value(v) {}
-};
 
 class PMTree {
- private:
-    Node* root;
-    void buildTree(Node* node, std::vector<char> remaining); 
-    void collectAll(Node* node, std::vector<char>& current, 
-                    std::vector<std::vector<char>>& result);
-    void findPermByNumber(Node* node, int target, int& counter, 
-                          std::vector<char>& result, bool& found);
-
  public:
-    explicit PMTree(const std::vector<char>& elements);
-    ~PMTree();
+  struct Node {
+    char value;
+    std::vector<Node*> children;
+    explicit Node(char val) : value(val) {}
+  };
+
+  explicit PMTree(const std::vector<char>& in);
+  ~PMTree();
+
+  Node* getRoot() const;
+  int getSize() const;
+
+ private:
+  Node* root;
+  int size;
+  void buildTree(Node* node, const std::vector<char>& remaining);
+  void destroyTree(Node* node);
 };
 std::vector<std::vector<char>> getAllPerms(const PMTree& tree);
 std::vector<char> getPerm1(const PMTree& tree, int num);
