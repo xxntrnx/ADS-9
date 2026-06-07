@@ -1,10 +1,10 @@
 // Copyright 2022 NNTU-CS
-#include "tree.h"
-#include <chrono>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
 #include <iostream>
 #include <vector>
+#include "tree.h"
 
 int factorial(int n) {
     int res = 1;
