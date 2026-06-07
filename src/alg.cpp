@@ -1,10 +1,8 @@
 // Copyright 2022 NNTU-CS
-#include <iostream>
-#include <fstream>
-#include <locale>
-#include <cstdlib>
 #include "tree.h"
+
 #include <algorithm>
+#include <vector>
 
 int factorial(int n) {
     int res = 1;
@@ -29,6 +27,7 @@ void PMTree::buildTree(Node* node, std::vector<char> remaining) {
         buildTree(child, next);
     }
 }
+
 PMTree::PMTree(const std::vector<char>& elements) {
     std::vector<char> sorted = elements;
     std::sort(sorted.begin(), sorted.end());
@@ -36,9 +35,28 @@ PMTree::PMTree(const std::vector<char>& elements) {
     root = new Node('\0');
     buildTree(root, sorted);
 }
-PMTree::~PMTree() {
+
+void PMTree::destroyTree(Node* node) {
+    if (!node) return;
+    for (Node* child : node->children) {
+        destroyTree(child);
+    }
+    delete node;
 }
-void PMTree::collectAll(Node* node, std::vector<char>& current, 
+
+PMTree::~PMTree() {
+    destroyTree(root);
+}
+
+PMTree::Node* PMTree::getRoot() const {
+    return root;
+}
+
+int PMTree::getSize() const {
+    return size;
+}
+
+void PMTree::collectAll(Node* node, std::vector<char>& current,
                         std::vector<std::vector<char>>& result) {
     if (node->value != '\0') {
         current.push_back(node->value);
@@ -55,7 +73,7 @@ void PMTree::collectAll(Node* node, std::vector<char>& current,
     }
 }
 
-void PMTree::findPermByNumber(Node* node, int target, int& counter, 
+void PMTree::findPermByNumber(Node* node, int target, int& counter,
                               std::vector<char>& result, bool& found) {
     if (found) return;
 
@@ -83,6 +101,7 @@ void PMTree::findPermByNumber(Node* node, int target, int& counter,
         result.pop_back();
     }
 }
+
 std::vector<std::vector<char>> getAllPerms(const PMTree& tree) {
     std::vector<std::vector<char>> result;
     std::vector<char> current;
@@ -98,7 +117,8 @@ std::vector<char> getPerm1(const PMTree& tree, int num) {
     bool found = false;
     if (num <= 0) return result;
     PMTree* nonConst = const_cast<PMTree*>(&tree);
-    nonConst->findPermByNumber(nonConst->getRoot(), num, counter, result, found);
+    nonConst->findPermByNumber(nonConst->getRoot(), num, counter, result,
+                               found);
     return result;
 }
 
@@ -108,7 +128,7 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
     if (num < 1 || num > factorial(n)) {
         return result;
     }
-    Node* current = tree.getRoot();
+    PMTree::Node* current = tree.getRoot();
     int target = num - 1;
     int currentN = n;
     while (current->children.size() > 0) {
