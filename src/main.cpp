@@ -1,6 +1,5 @@
 // Copyright 2022 NNTU-CS
 #include "tree.h"
-
 #include <chrono>
 #include <cstdlib>
 #include <ctime>
@@ -40,7 +39,8 @@ int main() {
     std::cout << std::endl;
 
     std::cout << "\nn\tall\tp1\tp2" << std::endl;
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
+
+    unsigned int seed = static_cast<unsigned>(std::time(nullptr));
 
     for (int n = 3; n <= 8; n++) {
         std::vector<char> sym;
@@ -49,7 +49,7 @@ int main() {
         }
 
         PMTree tree(sym);
-        int num = rand() % factorial(n) + 1;
+        int num = rand_r(&seed) % factorial(n) + 1;
 
         auto start = std::chrono::high_resolution_clock::now();
         auto all = getAllPerms(tree);
