@@ -18,12 +18,18 @@ class PMTree {
   Node* getRoot() const;
   int getSize() const;
 
+  void collectAll(Node* node, std::vector<char>& current, 
+                  std::vector<std::vector<char>>& result);
+  void findPermByNumber(Node* node, int target, int& counter, 
+                        std::vector<char>& result, bool& found);
+
  private:
   Node* root;
   int size;
   void buildTree(Node* node, const std::vector<char>& remaining);
   void destroyTree(Node* node);
 };
+
 std::vector<std::vector<char>> getAllPerms(const PMTree& tree);
 std::vector<char> getPerm1(const PMTree& tree, int num);
 std::vector<char> getPerm2(const PMTree& tree, int num);
